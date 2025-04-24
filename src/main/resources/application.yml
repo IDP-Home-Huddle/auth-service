@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: auth-service
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+
+server:
+  port: 8081
+
+token:
+  ttl: 3600000
+  secret: "https://www.youtube.com/watch?v=VBUMYOYJISc"
+
+vars:
+  security:
+    enable: true
