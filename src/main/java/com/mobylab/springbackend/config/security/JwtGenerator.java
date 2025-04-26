@@ -15,12 +15,10 @@ import java.util.stream.Collectors;
 
 @Component
 public class JwtGenerator {
-
     @Value("${token.secret}")
     private String JWT_SECRET;
     @Value("${token.ttl}")
     private long JWT_EXPIRY;
-
 
     public String generateToken(Authentication authentication) {
         String username = authentication.getName();
@@ -39,22 +37,5 @@ public class JwtGenerator {
                 .setExpiration(expireDate)
                 .signWith(SignatureAlgorithm.HS512, JWT_SECRET)
                 .compact();
-    }
-
-    public String getUsernameFromJWT(String token) {
-        Claims claims = Jwts.parser()
-                .setSigningKey(JWT_SECRET)
-                .parseClaimsJws(token)
-                .getBody();
-        return claims.getSubject();
-    }
-
-    public boolean validateToken(String token) {
-        try {
-            Jwts.parser().setSigningKey(JWT_SECRET).parseClaimsJws(token);
-            return true;
-        } catch (Exception ex) {
-            throw new AuthenticationCredentialsNotFoundException("JWT was expired or incorrect");
-        }
     }
 }

@@ -6,12 +6,11 @@ spring:
       matching-strategy: ant_path_matcher
 
 server:
-  port: 8081
+  port: 8191
 
 token:
   ttl: 3600000
   secret: "https://www.youtube.com/watch?v=VBUMYOYJISc"
 
 vars:
-  security:
-    enable: true
+  task-management-service-url: ${TASK_MANAGEMENT_SERVICE_URL}

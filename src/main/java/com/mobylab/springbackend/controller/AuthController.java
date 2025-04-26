@@ -2,14 +2,11 @@ package com.mobylab.springbackend.controller;
 
 import com.mobylab.springbackend.service.AuthService;
 import com.mobylab.springbackend.service.dto.*;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -17,7 +14,6 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
-
     @Autowired
     private AuthService authService;
     @Autowired
@@ -26,16 +22,16 @@ public class AuthController {
     private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
 
     @RequestMapping(path ="/register", method = RequestMethod.POST)
-    public ResponseEntity<?> register(@RequestBody RegisterDto registerDto) {
-        logger.info("Request to register user {}", registerDto.getEmail());
-        UUID familyId = authService.register(registerDto);
-        logger.info("Successfully registered user {}", registerDto.getEmail());
+    public ResponseEntity<?> register(@RequestBody RegisterRequestDto registerRequestDto) {
+        logger.info("Request to register user {}", registerRequestDto.getEmail());
+        authService.registerWithoutFamilyId(registerRequestDto); // to retrieve family id from body
+        logger.info("Successfully registered user {}", registerRequestDto.getEmail());
 
-        return new ResponseEntity<>(familyId, HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK); // to return family id
     }
 
-    @RequestMapping(path ="/register-with-family-id", method = RequestMethod.POST)
-    public ResponseEntity<?> register(@RequestBody RegisterWithFamilyIdDto registerDto) {
+    @RequestMapping(path ="/register/family-id", method = RequestMethod.POST)
+    public ResponseEntity<?> register(@RequestBody RegisterWithFamilyIdRequestDto registerDto) {
         logger.info("Request to register user {}", registerDto.getEmail());
         authService.registerWithFamilyId(registerDto);
         logger.info("Successfully registered user {}", registerDto.getEmail());
@@ -44,25 +40,13 @@ public class AuthController {
     }
 
     @RequestMapping(path ="/login", method = RequestMethod.POST)
-    public ResponseEntity<?> login(@RequestBody LoginDto loginDto) {
-        logger.info("Request to login for user {}", loginDto.getEmail());
-        String token = authService.login(loginDto);
-        logger.info("Successfully logged in user {}", loginDto.getEmail());
+    public ResponseEntity<?> login(@RequestBody LoginRequestDto loginRequestDto) {
+        logger.info("Request to login for user {}", loginRequestDto.getEmail());
+        String token = authService.login(loginRequestDto);
+        logger.info("Successfully logged in user {}", loginRequestDto.getEmail());
 
         loginResponseDto.setToken(token);
 
         return new ResponseEntity<>(loginResponseDto, HttpStatus.OK);
-    }
-
-    @SecurityRequirement(name = "Bearer Authentication")
-    @RequestMapping(path ="/token", method = RequestMethod.GET)
-    public ResponseEntity<?> validateToken() {
-        UserDetails user = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-        logger.info("Request to validate token for user {}", user.getUsername());
-        String email = user.getUsername();
-        logger.info("Successfully validated token for user {}", user.getUsername());
-
-        return new ResponseEntity<>(email, HttpStatus.OK);
     }
 }

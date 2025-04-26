@@ -3,7 +3,7 @@ package com.mobylab.springbackend.service.dto;
 import org.springframework.stereotype.Component;
 
 @Component
-public class LoginDto {
+public class LoginRequestDto {
     private String email;
     private String password;
 
