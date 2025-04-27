@@ -39,7 +39,7 @@ public class AuthService {
         registerRequestDto.setPassword(passwordEncoder.encode(password));
 
         ResponseEntity<Void> response = requestService.sendPostRequest(
-                "/auth/register",
+                "/authproxy/register",
                 Collections.emptyMap(),
                 registerRequestDto,
                 new ParameterizedTypeReference<>(){});
@@ -57,7 +57,7 @@ public class AuthService {
         registerRequestDto.setPassword(passwordEncoder.encode(password));
 
         ResponseEntity<Void> response = requestService.sendPostRequest(
-                "/auth/register/family-id",
+                "/authproxy/register/family-id",
                 Collections.emptyMap(),
                 registerRequestDto,
                 new ParameterizedTypeReference<>(){});
@@ -73,7 +73,7 @@ public class AuthService {
         loginRequestDto.setPassword(passwordEncoder.encode(password));
 
         ResponseEntity<Void> response = requestService.sendPostRequest(
-                "/user/login",
+                "/authproxy/login",
                 Collections.emptyMap(),
                 loginRequestDto,
                 new ParameterizedTypeReference<>(){});
