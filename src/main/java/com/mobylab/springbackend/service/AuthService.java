@@ -18,6 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
+import java.util.UUID;
 
 @Service
 public class AuthService {
@@ -34,11 +35,11 @@ public class AuthService {
 
     private static final Logger logger = LoggerFactory.getLogger(AuthService.class);
 
-    public void registerWithoutFamilyId(RegisterRequestDto registerRequestDto) {
+    public UUID registerWithoutFamilyId(RegisterRequestDto registerRequestDto) {
         String password = registerRequestDto.getPassword();
         registerRequestDto.setPassword(passwordEncoder.encode(password));
 
-        ResponseEntity<Void> response = requestService.sendPostRequest(
+        ResponseEntity<UUID> response = requestService.sendPostRequest(
                 "/authproxy/register",
                 Collections.emptyMap(),
                 registerRequestDto,
@@ -49,7 +50,7 @@ public class AuthService {
             throw new AuthException("Register request failed.");
         }
 
-        System.out.println(response.getBody());
+        return response.getBody();
     }
 
     public void registerWithFamilyId(RegisterWithFamilyIdRequestDto registerRequestDto) {

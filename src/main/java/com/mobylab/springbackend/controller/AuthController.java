@@ -24,10 +24,10 @@ public class AuthController {
     @RequestMapping(path ="/register", method = RequestMethod.POST)
     public ResponseEntity<?> register(@RequestBody RegisterRequestDto registerRequestDto) {
         logger.info("Request to register user {}", registerRequestDto.getEmail());
-        authService.registerWithoutFamilyId(registerRequestDto); // to retrieve family id from body
+        UUID familyId = authService.registerWithoutFamilyId(registerRequestDto);
         logger.info("Successfully registered user {}", registerRequestDto.getEmail());
 
-        return new ResponseEntity<>(HttpStatus.OK); // to return family id
+        return new ResponseEntity<>(familyId, HttpStatus.OK);
     }
 
     @RequestMapping(path ="/register/family-id", method = RequestMethod.POST)
