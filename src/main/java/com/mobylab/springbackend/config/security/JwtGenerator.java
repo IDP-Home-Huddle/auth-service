@@ -33,7 +33,7 @@ public class JwtGenerator {
                 .setSubject(username)
                 .claim("roles", roles)
                 .setIssuedAt(new Date())
-                .setIssuer("http://localhost:8081")
+                .setIssuer("http://localhost:8191")
                 .setExpiration(expireDate)
                 .signWith(SignatureAlgorithm.HS512, JWT_SECRET)
                 .compact();
