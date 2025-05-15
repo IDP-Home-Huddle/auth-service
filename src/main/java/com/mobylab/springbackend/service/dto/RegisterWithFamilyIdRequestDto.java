@@ -15,14 +15,6 @@ public class RegisterWithFamilyIdRequestDto {
     @Pattern(regexp = "PARENT|CHILD")
     private String role;
 
-    public RegisterWithFamilyIdRequestDto(RegisterRequestDto registerRequestDto) {
-        this.firstName = registerRequestDto.getFirstName();
-        this.lastName = registerRequestDto.getLastName();
-        this.email = registerRequestDto.getEmail();
-        this.password = registerRequestDto.getPassword();
-        this.role = registerRequestDto.getRole();
-    }
-
     public UUID getFamilyId() {
         return familyId;
     }
